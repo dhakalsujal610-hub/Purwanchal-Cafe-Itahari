@@ -26,7 +26,44 @@
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Enhanced Animations */
+        /* Scale Animation for Icons */
+        @keyframes iconScale {
+            0%, 100% { 
+                transform: scale(1); 
+            }
+            50% { 
+                transform: scale(1.2); 
+            }
+        }
+
+        @keyframes shine {
+            0% { background-position: -100px; }
+            100% { background-position: 200px; }
+        }
+
+        @keyframes badgeShine {
+            0%, 100% { 
+                box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+                transform: translateY(0);
+            }
+            50% { 
+                box-shadow: 0 5px 20px rgba(39, 174, 96, 0.6);
+                transform: translateY(-2px);
+            }
+        }
+
+        @keyframes tagPulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: none;
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 3px 10px rgba(210, 105, 30, 0.2);
+            }
+        }
+
+        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -78,50 +115,13 @@
             }
         }
 
-        @keyframes shimmer {
-            0% {
-                background-position: -200% center;
-            }
-            100% {
-                background-position: 200% center;
-            }
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes ripple {
-            0% {
-                transform: scale(0);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
         body {
             font-family: 'Poppins', sans-serif;
             color: var(--text);
             background-color: var(--light);
             line-height: 1.6;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
         h1, h2, h3, h4 {
@@ -136,7 +136,19 @@
             padding: 0 15px;
         }
 
-        /* Enhanced Header */
+        /* Scroll Animation Classes */
+        .scroll-fade {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .scroll-fade.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Header */
         header {
             background: linear-gradient(135deg, rgba(255, 248, 240, 0.98) 0%, rgba(255, 248, 240, 0.95) 100%);
             padding: 18px 0;
@@ -148,7 +160,6 @@
             transition: var(--transition);
             border-bottom: 2px solid rgba(139, 69, 19, 0.15);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-            animation: fadeInUp 0.8s ease-out;
         }
 
         header.hidden {
@@ -157,7 +168,6 @@
 
         header.visible {
             transform: translateY(0);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
         }
 
         .nav-container {
@@ -180,7 +190,11 @@
 
         .logo i {
             color: var(--accent);
-            animation: bounce 2s ease-in-out infinite;
+            animation: iconScale 3s ease-in-out infinite;
+        }
+
+        .logo:hover i {
+            animation: iconScale 1s ease-in-out infinite;
         }
 
         .logo span {
@@ -263,18 +277,6 @@
             overflow: hidden;
         }
 
-        .hero:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(210, 105, 30, 0.1) 0%, transparent 50%);
-        }
-
         .hero-content {
             max-width: 850px;
             position: relative;
@@ -292,18 +294,6 @@
         .hero h1 span {
             color: var(--accent);
             position: relative;
-        }
-
-        .hero h1 span:after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            bottom: -8px;
-            left: 0;
-            animation: shimmer 3s infinite linear;
-            background-size: 200% 100%;
         }
 
         .hero-tagline {
@@ -337,39 +327,57 @@
             border: none;
             cursor: pointer;
             min-width: 200px;
+            position: relative;
         }
 
+        /* Shine Effect for Explore Menu Button */
         .btn-primary {
             background: linear-gradient(135deg, var(--primary), var(--dark));
             color: white;
             box-shadow: 0 10px 25px rgba(139, 69, 19, 0.3);
         }
 
+        .btn-primary:hover::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                transparent);
+            animation: shine 1s ease-out;
+        }
+
+        /* Shine Effect for Order Now Button */
         .btn-secondary {
             background: transparent;
             color: white;
             border: 2px solid var(--accent);
             box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-secondary:hover::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 215, 0, 0.2), 
+                transparent);
+            animation: shine 1s ease-out;
         }
 
         .btn:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(139, 69, 19, 0.4);
-        }
-
-        .btn:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: 0.6s;
-        }
-
-        .btn:hover:before {
-            left: 100%;
         }
 
         /* Menu Section */
@@ -414,7 +422,7 @@
             animation: fadeInUp 1s ease-out 0.2s both;
         }
 
-        /* Categories */
+        /* Categories - FIXED */
         .menu-categories {
             display: flex;
             justify-content: center;
@@ -433,40 +441,15 @@
             color: var(--primary);
             cursor: pointer;
             transition: var(--transition);
-            position: relative;
-            overflow: hidden;
             font-size: 1rem;
             white-space: nowrap;
         }
 
         .category-btn:hover {
+            background: var(--primary);
             color: white;
             transform: translateY(-3px);
             box-shadow: 0 15px 30px rgba(139, 69, 19, 0.2);
-        }
-
-        .category-btn:before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: var(--primary);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-            z-index: 1;
-        }
-
-        .category-btn:hover:before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .category-btn span {
-            position: relative;
-            z-index: 2;
         }
 
         .category-btn.active {
@@ -474,71 +457,109 @@
             color: white;
             transform: scale(1.1);
             box-shadow: 0 15px 30px rgba(139, 69, 19, 0.3);
-            animation: pulse 2s infinite;
         }
 
-        .category-btn.active:hover:before {
-            display: none;
-        }
-
-        /* Fixed Grid System - No transparency on hover */
+        /* Menu Grid - IMPROVED FOR MOBILE RESPONSIVENESS */
         .menu-items {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
-            animation: fadeInUp 1s ease-out 0.6s both;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        /* Mobile optimization - Show 3 items on medium tablets, 2 on phones */
+        @media (max-width: 1024px) {
+            .menu-items {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         @media (max-width: 768px) {
             .menu-items {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(3, 1fr);
                 gap: 20px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .menu-items {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
             }
         }
 
         @media (max-width: 480px) {
             .menu-items {
-                grid-template-columns: 1fr;
-                gap: 25px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            
+            /* Adjust menu items for better mobile display */
+            .menu-item-img-container {
+                height: 130px;
+            }
+            
+            .menu-item-content {
+                padding: 12px;
+            }
+            
+            .menu-item-title {
+                font-size: 1rem;
+            }
+            
+            .menu-item-price {
+                font-size: 1.1rem;
+                padding: 5px 10px;
+            }
+            
+            .menu-item-desc {
+                font-size: 0.8rem;
+                margin-bottom: 12px;
+            }
+            
+            .menu-item-button {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+            
+            .menu-item-tags {
+                gap: 5px;
+                margin-bottom: 12px;
+            }
+            
+            .menu-tag {
+                font-size: 0.7rem;
+                padding: 3px 8px;
             }
         }
 
-        /* Fixed Menu Cards - No transparency on hover */
+        @media (max-width: 360px) {
+            .menu-items {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Menu Cards */
         .menu-item {
             background: white;
-            border-radius: 20px;
+            border-radius: 15px;
             overflow: hidden;
             box-shadow: var(--shadow);
             transition: var(--transition);
-            opacity: 0;
-            transform: translateY(40px);
-            animation: fadeInUp 0.8s ease-out forwards;
             position: relative;
             height: 100%;
             display: flex;
             flex-direction: column;
-            /* Remove any backdrop-filter that causes transparency */
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-        }
-
-        .menu-item.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         .menu-item:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-            /* Ensure no transparency on hover */
-            background: white !important;
-            opacity: 1 !important;
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
         .menu-item-img-container {
             position: relative;
             overflow: hidden;
-            height: 200px;
+            height: 180px;
         }
 
         .menu-item-img {
@@ -546,9 +567,6 @@
             height: 100%;
             object-fit: cover;
             transition: var(--transition);
-            /* Prevent any weird overlay effects */
-            filter: none !important;
-            -webkit-filter: none !important;
         }
 
         .menu-item:hover .menu-item-img {
@@ -557,39 +575,39 @@
 
         .menu-item-badge {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 10px;
+            right: 10px;
             background: var(--success);
             color: white;
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
             font-weight: 600;
-            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
-            animation: bounce 2s ease-in-out infinite;
+            box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
             z-index: 10;
         }
 
+        .menu-item:hover .menu-item-badge {
+            animation: badgeShine 0.8s ease-out;
+        }
+
         .menu-item-content {
-            padding: 25px;
+            padding: 20px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            position: relative;
             background: white;
-            /* Ensure content stays opaque */
-            opacity: 1 !important;
         }
 
         .menu-item-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .menu-item-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: var(--dark);
             font-weight: 700;
             line-height: 1.3;
@@ -597,26 +615,13 @@
         }
 
         .menu-item-price {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 800;
             color: var(--primary);
             background: linear-gradient(135deg, rgba(139, 69, 19, 0.1), rgba(255, 215, 0, 0.1));
-            padding: 8px 16px;
-            border-radius: 15px;
+            padding: 6px 14px;
+            border-radius: 12px;
             transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .menu-item-price:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: 0.5s;
         }
 
         .menu-item:hover .menu-item-price {
@@ -625,65 +630,77 @@
             transform: scale(1.1);
         }
 
-        .menu-item:hover .menu-item-price:before {
-            left: 100%;
-        }
-
         .menu-item-desc {
             color: #666;
-            margin-bottom: 20px;
-            line-height: 1.6;
-            font-size: 0.95rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            font-size: 0.9rem;
             flex-grow: 1;
         }
 
         .menu-item-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 20px;
+            gap: 6px;
+            margin-bottom: 15px;
         }
 
         .menu-tag {
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(210, 105, 30, 0.1));
             color: var(--secondary);
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
             font-weight: 600;
             border: 1px solid rgba(255, 215, 0, 0.3);
             transition: var(--transition);
         }
 
-        .menu-item:hover .menu-tag {
+        .menu-tag:hover {
             background: var(--secondary);
             color: white;
             transform: translateY(-2px);
+            animation: tagPulse 0.5s ease-out;
         }
 
+        /* Shine Effect for Add to Order Button */
         .menu-item-button {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-weight: 700;
             cursor: pointer;
             transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
+            font-size: 0.9rem;
             position: relative;
             overflow: hidden;
-            font-size: 1rem;
+        }
+
+        .menu-item-button:hover::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            animation: shine 1s ease-out;
         }
 
         .menu-item-button:hover {
             background: linear-gradient(135deg, var(--dark), var(--primary));
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(139, 69, 19, 0.3);
+            box-shadow: 0 8px 15px rgba(139, 69, 19, 0.3);
         }
 
         /* Order Section */
@@ -695,33 +712,24 @@
 
         .order-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 35px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
         }
 
         .order-card {
             background: white;
-            border-radius: 25px;
-            padding: 40px;
+            border-radius: 20px;
+            padding: 30px;
             box-shadow: var(--shadow);
             transition: var(--transition);
             position: relative;
             overflow: hidden;
             border: 1px solid rgba(139, 69, 19, 0.1);
-            animation: fadeInUp 0.8s ease-out forwards;
-            opacity: 0;
-            /* No transparency on order cards */
-            backdrop-filter: none !important;
         }
 
-        .order-card:nth-child(1) { animation-delay: 0.2s; }
-        .order-card:nth-child(2) { animation-delay: 0.4s; }
-        .order-card:nth-child(3) { animation-delay: 0.6s; }
-
         .order-card:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 30px 60px rgba(139, 69, 19, 0.15);
-            background: white !important;
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(139, 69, 19, 0.15);
         }
 
         .order-card:before {
@@ -735,48 +743,53 @@
         }
 
         .order-card h3 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: var(--primary);
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
+        /* Scale Animation for Location, Phone, and Clock Icons */
         .order-card h3 i {
             color: var(--accent);
-            animation: float 4s ease-in-out infinite;
             background: rgba(139, 69, 19, 0.1);
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+            animation: iconScale 3s ease-in-out infinite;
+        }
+
+        .order-card:hover h3 i {
+            animation: iconScale 1.5s ease-in-out infinite;
         }
 
         .info-item {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             display: flex;
             align-items: flex-start;
-            gap: 15px;
+            gap: 12px;
             transition: var(--transition);
         }
 
         .info-item:hover {
-            transform: translateX(10px);
+            transform: translateX(8px);
         }
 
         .info-icon {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, rgba(139, 69, 19, 0.1), rgba(255, 215, 0, 0.1));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--primary);
-            font-size: 18px;
+            font-size: 16px;
             flex-shrink: 0;
             transition: var(--transition);
         }
@@ -788,7 +801,7 @@
         }
 
         .info-content h4 {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--dark);
             margin-bottom: 5px;
             font-weight: 600;
@@ -796,7 +809,7 @@
 
         .info-content p {
             color: #666;
-            font-size: 1rem;
+            font-size: 0.9rem;
             line-height: 1.5;
         }
 
@@ -829,87 +842,93 @@
         /* CTA Button */
         .button-container {
             text-align: center;
-            margin-top: 70px;
+            margin-top: 60px;
         }
 
+        /* Shine Effect for Call Now Button */
         .cta-button {
             display: inline-flex;
             align-items: center;
             gap: 15px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 20px 50px;
-            border-radius: 60px;
+            padding: 18px 45px;
+            border-radius: 50px;
             text-decoration: none;
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             transition: var(--transition);
-            box-shadow: 0 20px 40px rgba(139, 69, 19, 0.3);
+            box-shadow: 0 15px 35px rgba(139, 69, 19, 0.3);
             position: relative;
             overflow: hidden;
             animation: pulse 3s infinite;
         }
 
-        .cta-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 30px 60px rgba(139, 69, 19, 0.4);
-            animation: none;
-        }
-
-        .cta-button:before {
+        .cta-button:hover::after {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: 0.8s;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            animation: shine 1s ease-out;
         }
 
-        .cta-button:hover:before {
-            left: 100%;
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(139, 69, 19, 0.4);
+            animation: none;
         }
 
         /* Footer */
         footer {
             background: linear-gradient(135deg, var(--dark) 0%, #1a0f0a 100%);
             color: white;
-            padding: 80px 0 30px;
+            padding: 60px 0 25px;
         }
 
         .footer-content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 50px;
-            margin-bottom: 60px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
         }
 
         .footer-logo {
             font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            margin-bottom: 25px;
+            font-size: 2rem;
+            margin-bottom: 20px;
             color: white;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
+        .footer-logo i {
+            color: var(--accent);
+            animation: iconScale 3s ease-in-out infinite;
+        }
+
         .footer-about p {
             opacity: 0.85;
-            margin-bottom: 30px;
-            max-width: 320px;
-            line-height: 1.8;
+            margin-bottom: 25px;
+            max-width: 300px;
+            line-height: 1.7;
+            font-size: 0.95rem;
         }
 
         .social-icons {
             display: flex;
-            gap: 15px;
+            gap: 12px;
         }
 
         .social-icons a {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             display: flex;
@@ -926,16 +945,16 @@
         }
 
         .footer-section h4 {
-            font-size: 1.3rem;
-            margin-bottom: 30px;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
             position: relative;
-            padding-bottom: 15px;
+            padding-bottom: 12px;
         }
 
         .footer-section h4:after {
             content: '';
             position: absolute;
-            width: 50px;
+            width: 40px;
             height: 3px;
             background: var(--accent);
             bottom: 0;
@@ -947,7 +966,7 @@
         }
 
         .footer-links li {
-            margin-bottom: 18px;
+            margin-bottom: 15px;
         }
 
         .footer-links a {
@@ -957,33 +976,34 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 0.95rem;
         }
 
         .footer-links a:hover {
             color: var(--accent);
-            transform: translateX(10px);
+            transform: translateX(8px);
         }
 
         .copyright {
             text-align: center;
-            padding-top: 40px;
+            padding-top: 30px;
             border-top: 1px solid rgba(255, 255, 255, 0.15);
             opacity: 0.7;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         /* Responsive Design */
         @media (max-width: 992px) {
             .hero h1 {
-                font-size: 3.8rem;
+                font-size: 3.5rem;
             }
             
             .hero-tagline {
-                font-size: 1.4rem;
+                font-size: 1.3rem;
             }
             
-            .menu-items {
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            .section-title h2 {
+                font-size: 2.8rem;
             }
         }
 
@@ -1001,11 +1021,11 @@
                 width: 100%;
                 flex-direction: column;
                 background: white;
-                padding: 30px;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+                padding: 25px;
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
                 transition: var(--transition);
                 z-index: 999;
-                gap: 20px;
+                gap: 18px;
             }
             
             .nav-links.active {
@@ -1014,15 +1034,15 @@
             
             .nav-links a {
                 font-size: 1.1rem;
-                padding: 12px 0;
+                padding: 10px 0;
             }
             
             .hero h1 {
-                font-size: 2.8rem;
+                font-size: 2.5rem;
             }
             
             .hero-tagline {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
             }
             
             .hero-buttons {
@@ -1033,114 +1053,92 @@
             .btn {
                 width: 100%;
                 justify-content: center;
+                padding: 16px 30px;
+                min-width: auto;
             }
             
             .section-title h2 {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
             
             .menu-categories {
                 gap: 8px;
-                margin-bottom: 40px;
+                margin-bottom: 35px;
             }
             
             .category-btn {
-                padding: 10px 20px;
+                padding: 10px 18px;
                 font-size: 0.9rem;
-            }
-            
-            .menu-items {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-            
-            .menu-item-img-container {
-                height: 180px;
             }
             
             .order-container {
                 grid-template-columns: 1fr;
-                gap: 25px;
+                gap: 20px;
             }
             
             .order-card {
-                padding: 30px;
+                padding: 25px;
+            }
+            
+            .cta-button {
+                padding: 16px 35px;
+                font-size: 1rem;
+                width: 100%;
             }
         }
 
         @media (max-width: 576px) {
             .hero h1 {
-                font-size: 2.2rem;
-            }
-            
-            .hero-tagline {
-                font-size: 1.1rem;
-            }
-            
-            .section-title h2 {
                 font-size: 2rem;
             }
             
-            .menu-items {
+            .hero-tagline {
+                font-size: 1rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title p {
+                font-size: 1rem;
+            }
+            
+            .footer-content {
                 grid-template-columns: 1fr;
-                gap: 25px;
+                gap: 30px;
             }
-            
-            .menu-item-title {
-                font-size: 1.2rem;
-            }
-            
-            .menu-item-price {
-                font-size: 1.2rem;
-            }
-            
-            .cta-button {
-                padding: 16px 35px;
-                font-size: 1.1rem;
-                width: 100%;
-            }
-        }
-
-        /* Scroll Animations */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: var(--transition);
-        }
-
-        .animate-on-scroll.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         /* Notification */
         .notification {
             position: fixed;
-            top: 30px;
-            right: 30px;
+            top: 25px;
+            right: 25px;
             background: var(--success);
             color: white;
-            padding: 18px 28px;
-            border-radius: 15px;
+            padding: 15px 25px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            box-shadow: 0 15px 35px rgba(39, 174, 96, 0.3);
+            gap: 12px;
+            box-shadow: 0 12px 30px rgba(39, 174, 96, 0.3);
             z-index: 9999;
             transform: translateX(150%);
-            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: transform 0.6s;
         }
-
-        /* Image loading animation */
-        @keyframes loading {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-
-        .menu-item-img.loading {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
+        
+        @media (max-width: 768px) {
+            .notification {
+                top: 20px;
+                right: 20px;
+                left: 20px;
+                transform: translateY(-150%);
+            }
+            
+            .notification.active {
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -1148,7 +1146,7 @@
     <!-- Header -->
     <header id="mainHeader">
         <div class="container nav-container">
-            <a href="#" class="logo">
+            <a href="#home" class="logo">
                 <i class="fas fa-mug-hot"></i>Purwanchal<span>Cafe</span>
             </a>
             
@@ -1202,8 +1200,8 @@
                 <button class="category-btn" data-category="dessert">Dessert</button>
             </div>
             
-            <div class="menu-items">
-                <!-- Menu items populated by JavaScript -->
+            <div class="menu-items" id="menuItemsContainer">
+                <!-- Menu items will be populated by JavaScript -->
             </div>
         </div>
     </section>
@@ -1217,7 +1215,7 @@
             </div>
             
             <div class="order-container">
-                <div class="order-card">
+                <div class="order-card scroll-fade">
                     <h3><i class="fas fa-map-marker-alt"></i> Location</h3>
                     <div class="info-item">
                         <div class="info-icon">
@@ -1248,7 +1246,7 @@
                     </div>
                 </div>
                 
-                <div class="order-card">
+                <div class="order-card scroll-fade">
                     <h3><i class="fas fa-phone"></i> Contact</h3>
                     <div class="info-item">
                         <div class="info-icon">
@@ -1280,7 +1278,7 @@
                     </div>
                 </div>
                 
-                <div class="order-card hours-card">
+                <div class="order-card hours-card scroll-fade">
                     <h3><i class="fas fa-clock"></i> Opening Hours</h3>
                     <div class="info-item">
                         <div class="info-icon">
@@ -1313,7 +1311,7 @@
             </div>
             
             <div class="button-container">
-                <a href="tel:025582888" class="cta-button">
+                <a href="tel:025582888" class="cta-button scroll-fade">
                     <i class="fas fa-phone"></i> Call Now to Order
                 </a>
             </div>
@@ -1324,7 +1322,7 @@
     <footer id="contact">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-about">
+                <div class="footer-about scroll-fade">
                     <div class="footer-logo">
                         <i class="fas fa-mug-hot"></i>Purwanchal Cafe
                     </div>
@@ -1337,7 +1335,7 @@
                     </div>
                 </div>
                 
-                <div class="footer-section">
+                <div class="footer-section scroll-fade">
                     <h4>Quick Links</h4>
                     <ul class="footer-links">
                         <li><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
@@ -1347,7 +1345,7 @@
                     </ul>
                 </div>
                 
-                <div class="footer-section">
+                <div class="footer-section scroll-fade">
                     <h4>Contact Info</h4>
                     <ul class="footer-links">
                         <li><a href="#"><i class="fas fa-location-dot"></i> Antidiene, Itahari, Sunsari</a></li>
@@ -1358,14 +1356,14 @@
                 </div>
             </div>
             
-            <div class="copyright">
+            <div class="copyright scroll-fade">
                 <p>&copy; 2023 Purwanchal Cafe. All Rights Reserved. | Crafted with <i class="fas fa-heart" style="color: #ff6b6b;"></i> in Itahari</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Menu Data with WORKING IMAGES - All from reliable sources
+        // Enhanced Menu Data with UNIQUE images for ALL dishes
         const menuData = [
             {
                 id: 1,
@@ -1374,7 +1372,7 @@
                 description: "Sel roti, achar, boiled eggs and masala tea.",
                 category: "breakfast",
                 tags: ["Popular", "Vegetarian"],
-                image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&auto=format&fit=crop&q=60",
+                image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&auto=format&fit=crop&q=80",
                 badge: "Morning Special"
             },
             {
@@ -1384,7 +1382,7 @@
                 description: "Steamed dumplings with spicy tomato chutney.",
                 category: "lunch",
                 tags: ["Best Seller", "Spicy"],
-                image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?w-600&auto=format&fit=crop&q=60",
+                image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&auto=format&fit=crop&q=80",
                 badge: "Hot"
             },
             {
@@ -1394,7 +1392,7 @@
                 description: "Traditional Nepali meal with rice, lentils and curry.",
                 category: "lunch",
                 tags: ["Traditional", "Complete"],
-                image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&auto=format&fit=crop&q=60",
+                image: "https://images.unsplash.com/photo-1585937421612-70ca003675ed?w=400&auto=format&fit=crop&q=80",
                 badge: "Traditional"
             },
             {
@@ -1404,7 +1402,7 @@
                 description: "Grilled chicken with traditional spices.",
                 category: "snacks",
                 tags: ["Spicy", "Non-Veg"],
-                image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=600&auto=format&fit=crop&q=60",
+                image: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=400&auto=format&fit=crop&q=80",
                 badge: "Grilled"
             },
             {
@@ -1414,7 +1412,7 @@
                 description: "Traditional spiced tea with milk.",
                 category: "drinks",
                 tags: ["Hot", "Traditional"],
-                image: "https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?w=600&auto=format&fit=crop&q=60",
+                image: "https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?w=400&auto=format&fit=crop&q=80",
                 badge: "Hot"
             },
             {
@@ -1424,7 +1422,7 @@
                 description: "Signature blend with cardamom and cinnamon.",
                 category: "drinks",
                 tags: ["Signature", "Hot"],
-                image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&auto=format&fit=crop&q=60",
+                image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&auto=format&fit=crop&q=80",
                 badge: "Signature"
             },
             {
@@ -1434,7 +1432,7 @@
                 description: "Traditional sweet curd from Bhaktapur.",
                 category: "dessert",
                 tags: ["Sweet", "Traditional"],
-                image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=600&auto=format&fit=crop&q=60",
+                image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&auto=format&fit=crop&q=80",
                 badge: "Sweet"
             },
             {
@@ -1444,7 +1442,7 @@
                 description: "Creamy yogurt drink with fresh mango.",
                 category: "drinks",
                 tags: ["Cold", "Refreshing"],
-                image: "https://images.unsplash.com/photo-1565962652551-4fe3b8e8c6c0?w=600&auto=format&fit=crop&q=60",
+                image: "https://images.unsplash.com/photo-1565962652551-4fe3b8e8c6c0?w=400&auto=format&fit=crop&q=80",
                 badge: "Refreshing"
             },
             {
@@ -1454,7 +1452,7 @@
                 description: "Stir-fried noodles with fresh vegetables.",
                 category: "lunch",
                 tags: ["Vegetarian", "Quick"],
-                image: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=600&auto=format&fit=crop&q=60",
+                image: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=400&auto=format&fit=crop&q=80",
                 badge: "Quick"
             },
             {
@@ -1464,7 +1462,7 @@
                 description: "Crispy vegetable fritters with mint chutney.",
                 category: "snacks",
                 tags: ["Crispy", "Vegetarian"],
-                image: "https://images.unsplash.com/photo-1563379091339-03246963d9d6?w=600&auto=format&fit=crop&q=60",
+                image: "https://images.unsplash.com/photo-1633613286991-611fe299c4be?w=400&auto=format&fit=crop&q=80",
                 badge: "Crispy"
             },
             {
@@ -1474,7 +1472,7 @@
                 description: "Vanilla ice cream with chocolate and nuts.",
                 category: "dessert",
                 tags: ["Sweet", "Cold"],
-                image: "https://images.unsplash.com/photo-1566566717285-2b3d42b9e4c7?w=600&auto=format&fit=crop&q=60",
+                image: "https://images.unsplash.com/photo-1566566717285-2b3d42b9e4c7?w=400&auto=format&fit=crop&q=80",
                 badge: "Cold"
             },
             {
@@ -1484,262 +1482,333 @@
                 description: "Seasonal fresh fruit juice.",
                 category: "drinks",
                 tags: ["Fresh", "Healthy"],
-                image: "https://images.unsplash.com/photo-1629361726420-629e6ba67c1f?w=600&auto=format&fit=crop&q=60",
+                image: "https://images.unsplash.com/photo-1629361726420-629e6ba67c1f?w=400&auto=format&fit=crop&q=80",
+                badge: "Fresh"
+            },
+            {
+                id: 13,
+                name: "Paneer Tikka",
+                price: "Rs 520",
+                description: "Grilled cottage cheese with spices.",
+                category: "snacks",
+                tags: ["Vegetarian", "Grilled"],
+                image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=400&auto=format&fit=crop&q=80",
+                badge: "Vegetarian"
+            },
+            {
+                id: 14,
+                name: "Cold Coffee",
+                price: "Rs 220",
+                description: "Iced coffee with cream and chocolate.",
+                category: "drinks",
+                tags: ["Cold", "Creamy"],
+                image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&auto=format&fit=crop&q=80",
+                badge: "Chilled"
+            },
+            {
+                id: 15,
+                name: "Gulab Jamun",
+                price: "Rs 180",
+                description: "Sweet milk balls in rose syrup.",
+                category: "dessert",
+                tags: ["Sweet", "Traditional"],
+                image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=400&auto=format&fit=crop&q=80",
+                badge: "Sweet"
+            },
+            {
+                id: 16,
+                name: "Chicken Biryani",
+                price: "Rs 580",
+                description: "Fragrant rice with chicken and spices.",
+                category: "lunch",
+                tags: ["Spicy", "Non-Veg"],
+                image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=400&auto=format&fit=crop&q=80",
+                badge: "Spicy"
+            },
+            {
+                id: 17,
+                name: "Aloo Paratha",
+                price: "Rs 350",
+                description: "Stuffed potato bread with yogurt.",
+                category: "breakfast",
+                tags: ["Vegetarian", "Hearty"],
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&auto=format&fit=crop&q=80",
+                badge: "Hearty"
+            },
+            {
+                id: 18,
+                name: "Samosa",
+                price: "Rs 250",
+                description: "Crispy pastry with spiced potatoes.",
+                category: "snacks",
+                tags: ["Crispy", "Vegetarian"],
+                image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&auto=format&fit=crop&q=80",
+                badge: "Crispy"
+            },
+            {
+                id: 19,
+                name: "Butter Chicken",
+                price: "Rs 720",
+                description: "Creamy tomato curry with chicken.",
+                category: "lunch",
+                tags: ["Creamy", "Non-Veg"],
+                image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400&auto=format&fit=crop&q=80",
+                badge: "Creamy"
+            },
+            {
+                id: 20,
+                name: "Fresh Lemonade",
+                price: "Rs 150",
+                description: "Freshly squeezed lemon with mint.",
+                category: "drinks",
+                tags: ["Refreshing", "Fresh"],
+                image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=400&auto=format&fit=crop&q=80",
                 badge: "Fresh"
             }
         ];
 
-        // Header Scroll Behavior - Fixed
-        let lastScrollTop = 0;
-        const header = document.getElementById('mainHeader');
-        let ticking = false;
-
-        function updateHeaderVisibility() {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuItemsContainer = document.getElementById('menuItemsContainer');
+            const categoryButtons = document.querySelectorAll('.category-btn');
             
-            if (scrollTop > lastScrollTop && scrollTop > 100) {
-                header.classList.add('hidden');
-                header.classList.remove('visible');
-            } else {
-                header.classList.remove('hidden');
-                header.classList.add('visible');
-            }
-            
-            lastScrollTop = scrollTop;
-            ticking = false;
-        }
-
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                window.requestAnimationFrame(updateHeaderVisibility);
-                ticking = true;
-            }
-        });
-
-        // Mobile Menu
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const navLinks = document.getElementById('navLinks');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            const icon = mobileMenuBtn.querySelector('i');
-            if (navLinks.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        });
-        
-        // Close mobile menu on link click
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                mobileMenuBtn.querySelector('i').classList.remove('fa-times');
-                mobileMenuBtn.querySelector('i').classList.add('fa-bars');
-            });
-        });
-        
-        // Menu Rendering
-        const menuItemsContainer = document.querySelector('.menu-items');
-        const categoryButtons = document.querySelectorAll('.category-btn');
-        
-        function renderMenuItems(category = 'all') {
-            menuItemsContainer.innerHTML = '';
-            
-            const filteredItems = category === 'all' 
-                ? menuData 
-                : menuData.filter(item => item.category === category);
-            
-            filteredItems.forEach((item, index) => {
-                const menuItem = document.createElement('div');
-                menuItem.className = 'menu-item animate-on-scroll';
-                menuItem.style.animationDelay = `${index * 0.1}s`;
+            // Function to render menu items
+            function renderMenuItems(category = 'all') {
+                menuItemsContainer.innerHTML = '';
                 
-                menuItem.innerHTML = `
-                    <div class="menu-item-img-container">
-                        <img src="${item.image}" alt="${item.name}" class="menu-item-img" loading="lazy" 
-                             onerror="this.src='https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&auto=format&fit=crop&q=60'">
-                        ${item.badge ? `<div class="menu-item-badge">${item.badge}</div>` : ''}
-                    </div>
-                    <div class="menu-item-content">
-                        <div class="menu-item-header">
-                            <h3 class="menu-item-title">${item.name}</h3>
-                            <span class="menu-item-price">${item.price}</span>
+                // Filter items based on category
+                let itemsToShow = menuData;
+                if (category !== 'all') {
+                    itemsToShow = menuData.filter(item => item.category === category);
+                }
+                
+                // Show message if no items
+                if (itemsToShow.length === 0) {
+                    menuItemsContainer.innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                            <h3 style="color: var(--primary); margin-bottom: 10px;">No items found in this category</h3>
+                            <p style="color: #666;">Please check back later or try another category.</p>
                         </div>
-                        <p class="menu-item-desc">${item.description}</p>
-                        <div class="menu-item-tags">
-                            ${item.tags.map(tag => `<span class="menu-tag">${tag}</span>`).join('')}
+                    `;
+                    return;
+                }
+                
+                // Create HTML for each menu item with scroll animation
+                itemsToShow.forEach((item, index) => {
+                    const menuItem = document.createElement('div');
+                    menuItem.className = 'menu-item scroll-fade';
+                    menuItem.style.animationDelay = `${index * 0.1}s`;
+                    
+                    menuItem.innerHTML = `
+                        <div class="menu-item-img-container">
+                            <img src="${item.image}" alt="${item.name}" class="menu-item-img" loading="lazy">
+                            ${item.badge ? `<div class="menu-item-badge">${item.badge}</div>` : ''}
                         </div>
-                        <button class="menu-item-button" data-id="${item.id}">
-                            <i class="fas fa-shopping-cart"></i> Add to Order
-                        </button>
-                    </div>
+                        <div class="menu-item-content">
+                            <div class="menu-item-header">
+                                <h3 class="menu-item-title">${item.name}</h3>
+                                <span class="menu-item-price">${item.price}</span>
+                            </div>
+                            <p class="menu-item-desc">${item.description}</p>
+                            <div class="menu-item-tags">
+                                ${item.tags.map(tag => `<span class="menu-tag">${tag}</span>`).join('')}
+                            </div>
+                            <button class="menu-item-button" data-id="${item.id}">
+                                <i class="fas fa-shopping-cart"></i> Add to Order
+                            </button>
+                        </div>
+                    `;
+                    
+                    menuItemsContainer.appendChild(menuItem);
+                    
+                    // Add scroll animation to this item
+                    setTimeout(() => {
+                        const observer = new IntersectionObserver((entries) => {
+                            entries.forEach(entry => {
+                                if (entry.isIntersecting) {
+                                    entry.target.classList.add('visible');
+                                }
+                            });
+                        }, { threshold: 0.1 });
+                        
+                        observer.observe(menuItem);
+                    }, 100);
+                });
+                
+                // Add event listeners to order buttons
+                document.querySelectorAll('.menu-item-button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const itemId = this.getAttribute('data-id');
+                        const item = menuData.find(i => i.id == itemId);
+                        
+                        // Button animation
+                        this.style.transform = 'scale(0.95)';
+                        this.innerHTML = '<i class="fas fa-check"></i> Added!';
+                        this.style.background = 'var(--success)';
+                        
+                        setTimeout(() => {
+                            this.style.transform = '';
+                            this.innerHTML = '<i class="fas fa-shopping-cart"></i> Add to Order';
+                            this.style.background = '';
+                        }, 1500);
+                        
+                        // Show notification
+                        showNotification(`${item.name} added to order!`);
+                    });
+                });
+            }
+            
+            // Initial render
+            renderMenuItems();
+            
+            // Add event listeners to category buttons
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    categoryButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Get category from data attribute
+                    const category = this.getAttribute('data-category');
+                    
+                    // Render items for this category
+                    renderMenuItems(category);
+                });
+            });
+            
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                    const icon = this.querySelector('i');
+                    if (navLinks.classList.contains('active')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+                
+                // Close mobile menu when clicking on a link
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.addEventListener('click', function() {
+                        navLinks.classList.remove('active');
+                        mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+                        mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+                    });
+                });
+            }
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        // Close mobile menu if open
+                        if (navLinks && navLinks.classList.contains('active')) {
+                            navLinks.classList.remove('active');
+                            mobileMenuBtn.querySelector('i').classList.remove('fa-times');
+                            mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+                        }
+                        
+                        const headerHeight = document.querySelector('header').offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Header hide/show on scroll
+            let lastScrollTop = 0;
+            const header = document.getElementById('mainHeader');
+            
+            window.addEventListener('scroll', function() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (scrollTop > lastScrollTop && scrollTop > 100) {
+                    header.classList.add('hidden');
+                    header.classList.remove('visible');
+                } else {
+                    header.classList.remove('hidden');
+                    header.classList.add('visible');
+                }
+                
+                lastScrollTop = scrollTop;
+            });
+            
+            // Scroll animation observer
+            const scrollObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            // Observe all elements with scroll-fade class
+            document.querySelectorAll('.scroll-fade').forEach(el => {
+                scrollObserver.observe(el);
+            });
+            
+            // Notification function
+            function showNotification(message) {
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <span>${message}</span>
                 `;
                 
-                menuItemsContainer.appendChild(menuItem);
-            });
-            
-            // Add event listeners to order buttons
-            document.querySelectorAll('.menu-item-button').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    const itemId = this.getAttribute('data-id');
-                    const item = menuData.find(i => i.id == itemId);
-                    
-                    // Button animation
-                    this.style.transform = 'scale(0.95)';
-                    this.innerHTML = '<i class="fas fa-check"></i> Added!';
-                    this.style.background = 'var(--success)';
-                    
-                    setTimeout(() => {
-                        this.style.transform = '';
-                        this.innerHTML = '<i class="fas fa-shopping-cart"></i> Add to Order';
-                        this.style.background = '';
-                    }, 1500);
-                    
-                    // Show notification
-                    showNotification(`${item.name} added to order!`);
-                });
-            });
-            
-            // Observe new items for scroll animations
-            document.querySelectorAll('.menu-item.animate-on-scroll').forEach(el => {
-                observer.observe(el);
-            });
-        }
-        
-        // Initial render
-        renderMenuItems();
-        
-        // Category Filtering
-        categoryButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Remove active class from all buttons
-                categoryButtons.forEach(btn => {
-                    btn.classList.remove('active');
-                });
+                document.body.appendChild(notification);
                 
-                // Add active class to clicked button
-                this.classList.add('active');
-                
-                // Filter items
-                const category = this.getAttribute('data-category');
-                renderMenuItems(category);
-                
-                // Scroll to menu section
-                document.querySelector('#menu').scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            });
-        });
-        
-        // Notification System
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            notification.innerHTML = `
-                <i class="fas fa-check-circle"></i>
-                <span>${message}</span>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Show notification
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 10);
-            
-            // Hide after 3 seconds
-            setTimeout(() => {
-                notification.style.transform = 'translateX(150%)';
+                // Show notification
                 setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 600);
-            }, 3000);
-        }
-        
-        // Scroll Animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-        
-        // Observe elements
-        document.querySelectorAll('.animate-on-scroll').forEach(el => {
-            observer.observe(el);
-        });
-        
-        // Smooth Scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
+                    notification.style.transform = 'translateX(0)';
+                    if (window.innerWidth <= 768) {
+                        notification.style.transform = 'translateY(0)';
+                    }
+                }, 10);
                 
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    const headerHeight = document.querySelector('header').offsetHeight;
-                    const targetPosition = targetElement.offsetTop - headerHeight;
-                    
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        // Handle image loading errors
-        document.addEventListener('DOMContentLoaded', () => {
-            const images = document.querySelectorAll('.menu-item-img');
-            images.forEach(img => {
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(150%)';
+                    if (window.innerWidth <= 768) {
+                        notification.style.transform = 'translateY(-150%)';
+                    }
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 600);
+                }, 3000);
+            }
+            
+            // Handle image loading errors
+            document.querySelectorAll('.menu-item-img').forEach(img => {
                 img.addEventListener('error', function() {
-                    this.src = 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&auto=format&fit=crop&q=60';
+                    this.src = 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&auto=format&fit=crop&q=80';
                     this.alt = 'Delicious Food';
                 });
             });
         });
-
-        // Add CSS for image error handling
-        const style = document.createElement('style');
-        style.textContent = `
-            .menu-item-img {
-                transition: opacity 0.3s ease;
-            }
-            
-            .menu-item-img:hover {
-                opacity: 0.9;
-            }
-            
-            /* Ensure no transparency issues */
-            .menu-item:hover {
-                background: white !important;
-                opacity: 1 !important;
-            }
-            
-            .menu-item-content {
-                background: white !important;
-                opacity: 1 !important;
-            }
-            
-            /* Remove any backdrop filters causing transparency */
-            * {
-                -webkit-backface-visibility: hidden;
-                backface-visibility: hidden;
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
